@@ -32,7 +32,18 @@ public class ServerManager {
 
     public static void main(String[] args) throws Exception {
         ServerManager server = new ServerManager();
-        server.start(8000, 9000);
+        int loginPort = 9000;
+        int registerPort = 8000;
+        if (args.length > 1) {
+            try {
+                registerPort = Integer.parseInt(args[0]);
+                loginPort = Integer.parseInt(args[1]);
+            } catch (Exception e) {
+                System.out.println("自定义参数： registerPort loginPort");
+                return;
+            }
+        }
+        server.start(registerPort, loginPort);
     }
 
 }
