@@ -6,7 +6,6 @@ import zliu.elliot.entity.ServerResponse;
 import zliu.elliot.entity.UserAccount;
 import zliu.elliot.utils.SocketUtils;
 
-import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -53,7 +52,7 @@ public class UDPServerProcessThread extends Thread{
         if (StringUtils.isEmpty(user.getUsername()) || StringUtils.isEmpty(user.getPassword())) {
             // 对字段的约束
             response.setFailureMsg("用户名或密码为空");
-        } else if (users.contains(user.getUsername())) {
+        } else if (users.containsKey(user.getUsername())) {
             // 不可重复
             response.setFailureMsg("用户名已存在");
         } else {
@@ -65,9 +64,10 @@ public class UDPServerProcessThread extends Thread{
 
         // 发送响应
         try {
-            SocketUtils.sendAndClose(new InetSocketAddress(this.inetAddress, this.port), JSON.toJSONString(response), -1);
-        } catch (IOException e) {
+            SocketUtils.sendAndCloseUDP(new InetSocketAddress(this.inetAddress, this.port), JSON.toJSONString(response), SocketUtils.TIME_OUT, SocketUtils.MAX_RETRY);
+        } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("UDP注册服务响应客户端失败！");
         }
 
     }

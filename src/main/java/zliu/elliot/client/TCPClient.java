@@ -3,11 +3,11 @@ package zliu.elliot.client;
 import com.alibaba.fastjson.JSON;
 import zliu.elliot.entity.ServerResponse;
 import zliu.elliot.entity.UserAccount;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Scanner;
 
 public class TCPClient {
@@ -30,20 +30,21 @@ public class TCPClient {
                 DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
                 String responseBody = dataInputStream.readUTF();
                 ServerResponse response = JSON.parseObject(responseBody, ServerResponse.class);
-                System.out.println(response.getMessage());
                 if (!response.ifSuccess()) {
-                    System.out.println("登录失败！");
+                    System.out.printf("登录失败！服务器消息：%s\n", response.getMessage());
                 } else {
-
+                    System.out.printf("登录成功！VerifyKey:%s\n", response.getMessage());
+                    break;
                 }
+            } catch (SocketException e) {
+                socket = null;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         TCPClient.login("127.0.0.1", 9000);
     }
-
 }

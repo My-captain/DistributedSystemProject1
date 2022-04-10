@@ -1,5 +1,7 @@
 package zliu.elliot.server;
 
+import zliu.elliot.utils.SocketUtils;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -19,7 +21,6 @@ public class TCPServerManager extends Thread{
 
     @Override
     public void run() {
-        //建立服務端
         ServerSocket server = null;
         try {
             server = new ServerSocket(this.localPort);

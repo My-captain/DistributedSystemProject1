@@ -19,8 +19,8 @@ public class ServerManager {
     public void start(int registerPort, int loginPort) throws Exception{
         if (FileUtils.exists(USER_SERIALIZE_FILE)) {
             String content = FileUtils.readFile(USER_SERIALIZE_FILE);
-            HashMap userSerialized = JSON.parseObject(content, HashMap.class);
-            loginUsers.putAll(userSerialized);
+            HashMap<String, String> userSerialized = JSON.parseObject(content, HashMap.class);
+            users.putAll(userSerialized);
         }
         SerializeThread serializeThread = new SerializeThread(this.users);
         serializeThread.start();
